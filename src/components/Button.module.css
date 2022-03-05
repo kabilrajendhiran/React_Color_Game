@@ -1,0 +1,20 @@
+.btn{
+    background-color: purple;
+    padding-top: 15px;
+    padding-bottom:15px;
+    padding-left: 30px ;
+    padding-right: 30px ;
+    color:  white ;
+    border-radius : 3px ;
+    border: none ;
+    font-size:  20px ;
+    cursor: pointer ;
+}
+
+.btnPressed{
+    box-shadow: none;
+}
+
+.btnNormal{
+    box-shadow:  1px 2px 3px 0 rgba(0,0,0,0.50) ;
+}

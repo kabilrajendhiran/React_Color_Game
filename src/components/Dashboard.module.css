@@ -1,0 +1,18 @@
+.appcontainer{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50vh;
+    width: 100vw;
+    background-color: transparent;
+}
+
+.innerContainer{
+    display:flex;
+    column-gap: 50px;
+}
+
+.outerContainer{
+    display: flex;
+    justify-content: center;
+}
