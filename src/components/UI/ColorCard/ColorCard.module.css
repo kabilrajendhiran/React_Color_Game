@@ -1,0 +1,31 @@
+.outerCard{
+   /*  width: 260px;
+    height: 260px; */
+    box-shadow: 2px 2px 4px 0px rgba(0,0,0,0.25);
+    border: none !important;
+}
+
+.innerCard{
+    width: 100%;
+    height: 100%;
+}
+
+.innerCardCorrectStatus{
+    cursor: default;
+}
+
+.innerCardWrongStatus{
+    cursor: default;
+}
+
+.outerCardCorrectStatus{
+    border: 1px solid rgb(12, 134, 12) !important;
+}
+
+.outerCardWrongStatus{
+    border: 1px solid red !important;
+}
+
+.innercardholder{
+    padding: 10% !important;
+}

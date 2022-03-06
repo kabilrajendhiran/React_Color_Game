@@ -1,6 +1,6 @@
 import {Component, Fragment} from "react";
-import Button from "./Button";
-import ColorCard from './ColorCard';
+import Button from "../../UI/Button/Button";
+import ColorCard from '../../UI/ColorCard/ColorCard';
 import classes from './Dashboard.module.css'
 
 class Dashboard extends Component {
@@ -15,25 +15,40 @@ class Dashboard extends Component {
             quizColor: colorArr[qIdx],
             winStatus: false,
             firstClick: false,
+            score:100
         }
     }
+
 
     render() { 
 
         const {red, green, blue} = this.state.quizColor;
+        const { btnLabel, btnColor, gameResult } = this.playBtnLabelGenerator();
+
         return (
             <Fragment>
                 
                 <div className={classes.container}>
                 <div style={{
+                    marginTop:'3%',
                     display:'flex',
+                    width:'100%',
                     flexDirection:'column',
                     alignItems:'center',
-                    backgroundColor: '#d3d3d3'
                 }}>
 
-                    <p style={{fontSize:'24px'}}>Guess the color</p>
-                    <p style={{fontSize:'48px'}}>{`RGB(${red}, ${green},${blue})`}</p>
+                    <p style={{fontSize:'32px'}}>Guess the color</p>
+                    {/* <p style={{fontSize:'20px'}}>{`RGB(${red}, ${green},${blue})`}</p> */}
+                    <div style={{
+                        display:'flex',
+                        flexDirection: 'row',
+                        alignItems:'center',
+                        columnGap: '10px'
+                    }}>
+                        <ColorCard size="100px" rgbColor={{red, green:0, blue:0}} />
+                        <ColorCard size="100px" rgbColor={{red:0, green, blue:0}} />
+                        <ColorCard size="100px" rgbColor={{red:0, green:0, blue}} />
+                    </div>
 
                 </div>
                 
@@ -42,7 +57,10 @@ class Dashboard extends Component {
                         <div className={classes.innerContainer} >
                             {
                                 this.state.colorArray.map((elem, index)=>{
-                                    return <ColorCard key={index} onClick={(event)=>this.matchColor(elem,index,event) } rgbColor={elem} />
+                                    return <ColorCard size="220px" 
+                                    key={index} 
+                                    onClick={(event)=>this.matchColor(elem,index,event) } 
+                                    rgbColor={elem} />
                                 })
                             }
                         </div>
@@ -51,11 +69,11 @@ class Dashboard extends Component {
 
                 <div style={{textAlign:"center"}}>
                     <Button 
-                        onClick={this.changeColor.bind(this)} btnLabel={this.playBtnLabelGenerator()}
+                        onClick={this.changeColor.bind(this)} btnLabel={btnLabel} btnColor={btnColor}
                     />
 
                     <h3>
-                        { this.resultLabelGenerator() }
+                        { gameResult }
                     </h3>
 
                 </div>
@@ -68,38 +86,30 @@ class Dashboard extends Component {
 
     playBtnLabelGenerator()
     {
-        let label = "";
+        let label = {
+            btnLabel:"",
+            btnColor:"",
+            gameResult:""
+        };
+        
         const{firstClick, winStatus } =  this.state;
         if(firstClick && !winStatus)
         {
-            label = "Reset";
+            label.btnLabel = "Reset";
+            label.btnColor ="btn-success";
+            label.gameResult = "No Luck!";
         }
         if(!firstClick)
         {
-            label = "Play";
+            label.btnLabel = "Play";
+            label.btnColor = "btn-primary";
+            label.gameResult = "";
         }
         if(winStatus)
         {
-            label = "Play Again";
-        }
-        return label;
-    }
-
-    resultLabelGenerator()
-    {
-        let label = "";
-        const{firstClick, winStatus } =  this.state;
-        if(firstClick && !winStatus)
-        {
-            label = "No Luck!";
-        }
-        if(!firstClick)
-        {
-            label = "";
-        }
-        if(winStatus)
-        {
-            label = "You won!!!";
+            label.btnLabel = "Play Again";
+            label.btnColor="btn-error";
+            label.gameResult = "You won!!!";
         }
         return label;
     }
@@ -112,7 +122,8 @@ class Dashboard extends Component {
             colorArray: colorArr,
             quizColor: colorArr[qIdx],
             winStatus: false,
-            firstClick: false
+            firstClick: false,
+            score:100
         });
     }
 
@@ -133,7 +144,7 @@ class Dashboard extends Component {
         {
             let newColorArr = [...this.state.colorArray]
             newColorArr[index].clicked = true;
-            this.setState({...this.state, colorArray: newColorArr, firstClick: true});
+            this.setState({...this.state, colorArray: newColorArr, firstClick: true, score:this.state.score-25});
         }
         
     }
