@@ -1,13 +1,16 @@
-import {Component, Fragment} from "react";
+import {Component, Fragment, createRef} from "react";
 import Button from "../../UI/Button/Button";
 import ColorCard from '../../UI/ColorCard/ColorCard';
+import BootStrapModal from "../../UI/Modal/Modal";
 import classes from './Dashboard.module.css'
+import {Modal} from 'bootstrap';
 
 class Dashboard extends Component {
     
     constructor(props)
     {
         super(props);
+        this.modalRef = createRef();
         let colorArr =  this.rgbColorArrayGenerator();
         let qIdx = this.randomInt(3);
         this.state = { 
@@ -15,7 +18,6 @@ class Dashboard extends Component {
             quizColor: colorArr[qIdx],
             winStatus: false,
             firstClick: false,
-            score:100
         }
     }
 
@@ -23,22 +25,14 @@ class Dashboard extends Component {
     render() { 
 
         const {red, green, blue} = this.state.quizColor;
-        const { btnLabel, btnColor, gameResult } = this.playBtnLabelGenerator();
-
+        const { btnLabel, btnColor, gameResult, modelTitle, modelContent } = this.dashboardDataGenerator();
         return (
             <Fragment>
-                
                 <div className={classes.container}>
-                <div style={{
-                    marginTop:'3%',
-                    display:'flex',
-                    width:'100%',
-                    flexDirection:'column',
-                    alignItems:'center',
-                }}>
+                <div className={classes.dashboardHeaderContainer} >
 
                     <p style={{fontSize:'32px'}}>Guess the color</p>
-                    {/* <p style={{fontSize:'20px'}}>{`RGB(${red}, ${green},${blue})`}</p> */}
+                    
                     <div style={{
                         display:'flex',
                         flexDirection: 'row',
@@ -74,22 +68,45 @@ class Dashboard extends Component {
 
                     <h3>
                         { gameResult }
+                        <BootStrapModal title={modelTitle} content={modelContent} customRef={this.modalRef} showModal={this.showModal} hideModal={this.hideModal} />
                     </h3>
-
                 </div>
-        
                 </div>
                     
             </Fragment>
         );
     }
 
-    playBtnLabelGenerator()
+    componentDidMount()
+    {
+        if(!this.state.firstClick) {
+            this.showModal();
+        }
+    }
+
+    showModal = () => {
+        const modalEle = this.modalRef.current;
+        const bsModal = new Modal(modalEle, {
+            backdrop: 'static',
+            keyboard: false
+        })
+        bsModal.show()
+    }
+    
+    hideModal = () => {
+        const modalEle = this.modalRef.current;
+        const bsModal= Modal.getInstance(modalEle)
+        bsModal.hide()
+    }
+
+    dashboardDataGenerator()
     {
         let label = {
             btnLabel:"",
             btnColor:"",
-            gameResult:""
+            gameResult:"",
+            modelTitle:"",
+            modelContent:""
         };
         
         const{firstClick, winStatus } =  this.state;
@@ -104,12 +121,16 @@ class Dashboard extends Component {
             label.btnLabel = "Play";
             label.btnColor = "btn-primary";
             label.gameResult = "";
+            label.modelTitle = "Instructions";
+            label.modelContent = "Choose color according to the combination of colors from the top";
         }
         if(winStatus)
         {
             label.btnLabel = "Play Again";
             label.btnColor="btn-error";
             label.gameResult = "You won!!!";
+            label.modelTitle= "Game result";
+            label.modelContent = "You won";
         }
         return label;
     }
@@ -123,7 +144,6 @@ class Dashboard extends Component {
             quizColor: colorArr[qIdx],
             winStatus: false,
             firstClick: false,
-            score:100
         });
     }
 
@@ -138,13 +158,13 @@ class Dashboard extends Component {
                 }
                 return elem;
             });
-            this.setState({...this.state, colorArray: newColorArr, winStatus: true, firstClick: true});
+            this.setState({colorArray: newColorArr, winStatus: true, firstClick: true});
         }
         else
         {
             let newColorArr = [...this.state.colorArray]
             newColorArr[index].clicked = true;
-            this.setState({...this.state, colorArray: newColorArr, firstClick: true, score:this.state.score-25});
+            this.setState({colorArray: newColorArr, firstClick: true, score:this.state.score-25});
         }
         
     }
@@ -153,7 +173,7 @@ class Dashboard extends Component {
     rgbQuizColorPicker()
     {
         let idx = this.randomInt(3);
-        this.setState({...this.setState, quizColor:this.state.colorArray[idx]});
+        this.setState({quizColor:this.state.colorArray[idx]});
     }
 
     rgbColorArrayGenerator()
