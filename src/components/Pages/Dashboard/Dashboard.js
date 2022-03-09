@@ -22,7 +22,6 @@ class Dashboard extends Component {
         }
     }
 
-
     render() { 
 
         const {red, green, blue} = this.state.quizColor;
@@ -55,7 +54,9 @@ class Dashboard extends Component {
                                     return <ColorCard size="220px" 
                                     key={index} 
                                     onClick={(event)=>this.matchColor(elem,index,event) } 
-                                    rgbColor={elem} />
+                                    rgbColor={{red: elem.red, green: elem.green, blue: elem.blue}}
+                                    cardData={{flag: elem.flag, clicked: elem.clicked, winStatus: this.state.winStatus}}
+                                />
                                 })
                             }
                         </div>
