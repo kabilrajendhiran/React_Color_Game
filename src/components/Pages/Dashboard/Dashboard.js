@@ -18,6 +18,7 @@ class Dashboard extends Component {
             quizColor: colorArr[qIdx],
             winStatus: false,
             firstClick: false,
+
         }
     }
 
@@ -157,6 +158,11 @@ class Dashboard extends Component {
 
     matchColor(elem, index)
     {
+        if(this.state.winStatus)
+        {
+            return;
+        }
+
         if(this.state.quizColor===elem)
         {
             let newColorArr = this.state.colorArray.map((clr, id)=>{
@@ -167,6 +173,7 @@ class Dashboard extends Component {
                 return elem;
             });
             this.setState({colorArray: newColorArr, winStatus: true, firstClick: true});
+            
         }
         else
         {
