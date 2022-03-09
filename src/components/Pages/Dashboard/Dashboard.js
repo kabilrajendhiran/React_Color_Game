@@ -84,6 +84,14 @@ class Dashboard extends Component {
         }
     }
 
+    componentDidUpdate()
+    {
+        if(this.state.winStatus)
+        {
+            this.showModal();
+        }
+    }
+
     showModal = () => {
         const modalEle = this.modalRef.current;
         const bsModal = new Modal(modalEle, {
