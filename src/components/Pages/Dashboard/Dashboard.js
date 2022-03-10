@@ -180,7 +180,7 @@ class Dashboard extends Component {
         {
             let newColorArr = [...this.state.colorArray]
             newColorArr[index].clicked = true;
-            this.setState({colorArray: newColorArr, firstClick: true, score:this.state.score-25});
+            this.setState({colorArray: newColorArr, firstClick: true});
         }
         
     }
